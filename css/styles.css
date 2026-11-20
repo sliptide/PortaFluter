@@ -202,7 +202,7 @@ h3 { font-size: 1.25rem; line-height: 1.2; }
   gap: 1.25rem;
 }
 
-.practice-main, .practice-sidebar, .music-catalog, .music-detail { display: grid; min-width: 0; gap: 1.25rem; }
+.practice-main, .practice-sidebar, .music-detail { display: grid; min-width: 0; gap: 1.25rem; }
 .music-layout { grid-template-columns: minmax(230px, 1fr) minmax(0, 3fr); }
 
 .panel {
@@ -342,7 +342,7 @@ h3 { font-size: 1.25rem; line-height: 1.2; }
 .hero-card .button.secondary, .hero-card .button.quiet { border-color: #dab58e99; background: transparent; color: var(--surface); }
 .hero-card .button.secondary:hover:not(:disabled), .hero-card .button.quiet:hover:not(:disabled) { background: #e9c19522; }
 
-.list, .catalog-list { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+.list { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
 .list-row { display: flex; min-height: 56px; align-items: center; justify-content: space-between; gap: .75rem; padding-block: .55rem; }
 .list-row + .list-row { border-top: 1px solid var(--line); }
 .list-main { display: grid; min-width: 0; gap: .15rem; }
@@ -414,24 +414,6 @@ select {
 .flashcard-note { font: 400 clamp(3.5rem, 11vw, 6rem)/1 var(--heading); letter-spacing: -.05em; }
 .flashcard-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: .55rem; }
 
-.catalog-list { gap: .35rem; }
-
-.catalog-item {
-  display: grid;
-  width: 100%;
-  min-height: 44px;
-  justify-items: start;
-  align-content: center;
-  gap: .1rem;
-  border: 1px solid transparent;
-  border-radius: 8px;
-  background: transparent;
-  padding: .45rem .7rem;
-  text-align: left;
-}
-
-.catalog-item:hover { background: var(--surface-alt); }
-.catalog-item[aria-pressed='true'] { border-color: var(--line); background: var(--paper); font-weight: 700; }
 .score-hint { min-width: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-alt); padding: .85rem; }
 
 .tuner-meter {
@@ -476,7 +458,7 @@ select {
   .main-nav a { flex: 1 1 0; padding-inline: .35rem; }
   .header-timer { grid-row: 1; grid-column: 2; }
   .practice-layout, .music-layout, .tuner-layout { grid-template-columns: minmax(0, 1fr); }
-  .view, .practice-layout, .practice-main, .practice-sidebar, .music-layout, .music-catalog, .music-detail, .tuner-layout { gap: 1rem; }
+  .view, .practice-layout, .practice-main, .practice-sidebar, .music-layout, .music-detail, .tuner-layout { gap: 1rem; }
 }
 
 @media (max-width: 485px) {
