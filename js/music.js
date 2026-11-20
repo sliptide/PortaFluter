@@ -60,7 +60,7 @@ export function noteByMidi(midi) {
 const ACCIDENTALS = { "#": 1, "♯": 1, b: -1, "♭": -1 };
 const SIGNS = { "-1": "♭", 0: "", 1: "♯" };
 
-function parseNote(token) {
+export function parseNote(token) {
   const [pitch, duration = "1"] = token.split(":");
   if (token === "R:0.5") return { midi: null, beats: 0.5 };
   const [, letter, sign, register] = /^([A-G])([#b♯♭]?)([4-7])$/.exec(pitch);

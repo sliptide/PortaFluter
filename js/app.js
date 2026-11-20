@@ -1,6 +1,7 @@
 import { NOTES, SCALES, DRILLS, SONGS, HOLIDAY_SONGS, noteByMidi } from "./music.js";
 import { renderFingering, renderScore } from "./notation.js";
 import { createPitchListener, pitchReading } from "./pitch.js";
+import { createJazzPractice, JAZZ_EXERCISES } from "./jazz.js";
 import {
   createTimer, getElapsed, getReviewItems, loadPractice, MINUTE_MS,
   RECENT_MS, savePractice, updatePractice,
@@ -14,7 +15,9 @@ const views = navigation.map(({ dataset }) => dataset.view);
 const catalogs = { scales: SCALES, drills: DRILLS, songs: SONGS, holiday: HOLIDAY_SONGS };
 const catalogLabels = { scales: "Scales", drills: "Note sets", songs: "Songs", holiday: "Holiday" };
 const wideScore = window.matchMedia("(min-width: 1180px)");
-const exercises = [...SCALES, ...DRILLS];
+catalogs.jazz = JAZZ_EXERCISES;
+catalogLabels.jazz = "Jazz";
+const exercises = [...SCALES, ...DRILLS, ...JAZZ_EXERCISES];
 const initial = loadPractice(exercises.map(({ id }) => id));
 let { records, timer, available: storageAvailable } = initial;
 let view = views.includes(location.hash.slice(1)) ? location.hash.slice(1) : "practice";
@@ -37,6 +40,12 @@ let latestFrequency = null;
 let lastReading = null;
 let spokenPitch = { midi: null, since: 0, announced: false };
 let alertAudio = null;
+
+const jazzPractice = createJazzPractice((focusId) => {
+  selectedScoreNote = -1;
+  render();
+  document.getElementById(focusId)?.focus({ preventScroll: true });
+});
 
 const pitchListener = createPitchListener({
   onStatus(status) {
@@ -135,7 +144,7 @@ function practiceView() {
           <div class="hero-copy">
             <p class="eyebrow">${next ? "Up next" : "Review queue clear"}</p>
             <h2 id="next-practice">${next ? html(next.title) : "Choose an exercise"}</h2>
-            <p>${next ? html(`${next.reason} · ${next.description}`) : "Your scales and note sets are up to date."}</p>
+            <p>${next ? html(`${next.reason} · ${next.description}`) : "Your exercises are up to date."}</p>
             ${next
               ? `<button type="button" class="button" data-action="open-exercise" data-value="${html(next.id)}">Open exercise</button>`
               : '<a href="#music" class="button">Browse music</a>'}
@@ -150,6 +159,7 @@ function practiceView() {
               ${pressedButton("All", "queue-filter", "all", queueFilter === "all")}
               ${pressedButton("Scales", "queue-filter", "scales", queueFilter === "scales")}
               ${pressedButton("Note sets", "queue-filter", "drills", queueFilter === "drills")}
+              ${pressedButton("Jazz", "queue-filter", "jazz", queueFilter === "jazz")}
             </div>
           </div>
           ${list.length ? `<ul class="list practice-queue">
@@ -284,12 +294,14 @@ function musicView() {
       <section class="panel music-detail" aria-labelledby="music-title">
         <div class="panel-header music-detail-heading">
           <div><h2 id="music-title">${html(item.title)}</h2>
+            ${item.skill ? `<p class="list-meta">${html(item.skill)}</p>` : ""}
             ${isExercise ? "" : `<p class="list-meta">${html(`${item.composer} · ${item.level} · ${rangeLabel(item)}`)}</p>`}
             <p>${html(item.description)}</p></div>
           ${isExercise ? `<div class="score-status"><span class="status-chip">${html(stats.recent ? "Recently practiced" : stats.label)}</span>
             ${stats.needsWork ? '<span class="status-chip focus-chip">Needs more practice</span>' : ""}</div>` : ""}
         </div>
         <div class="panel-body score-body">
+          ${category === "jazz" ? '<section id="jazz-practice" aria-label="Jazz playback"></section>' : ""}
           <div class="score-controls">
             <div class="segmented" role="group" aria-label="Score fingering display">
               ${pressedButton("Staff only", "score-mode", "staff", !showFingerings)}
@@ -342,7 +354,14 @@ function placeScoreHint() {
 }
 
 function mountScore() {
-  const item = currentItem();
+  let item = currentItem();
+  if (category === "jazz") {
+    jazzPractice.mount(document.querySelector("#jazz-practice"), item);
+    item = jazzPractice.score(item);
+    document.querySelector(".score-controls").hidden = !item;
+    document.querySelector(".score-stage").hidden = !item;
+    if (!item) return;
+  }
   document.querySelector("#score").replaceChildren(renderScore(item, {
     showFingerings,
     selectedIndex: selectedScoreNote,
@@ -535,6 +554,7 @@ function readTimerGoal(input) {
 const renderViews = { practice: practiceView, fingerings: fingeringsView, music: musicView, tuner: tunerView };
 
 function render() {
+  if (view !== "music" || category !== "jazz") jazzPractice.unmount();
   for (const link of navigation) {
     if (link.dataset.view === view) link.setAttribute("aria-current", "page");
     else link.removeAttribute("aria-current");
@@ -557,7 +577,9 @@ function navigate(next, writeHash = true) {
 }
 
 function openExercise(id) {
-  category = SCALES.some((item) => item.id === id) ? "scales" : "drills";
+  const catalog = Object.keys(catalogs).find((key) => catalogs[key].some((item) => item.id === id));
+  if (!catalog) return;
+  category = catalog;
   selections[category] = id;
   selectedScoreNote = -1;
   navigate("music");
@@ -729,10 +751,12 @@ window.addEventListener("hashchange", () => {
 });
 wideScore.addEventListener("change", placeScoreHint);
 document.addEventListener("visibilitychange", () => {
+  if (document.hidden) jazzPractice.stop();
   if (document.hidden && (micStatus === "listening" || micStatus === "requesting")) pitchListener.stop("interrupted");
   updateTimer();
 });
 window.addEventListener("pagehide", () => {
+  jazzPractice.stop();
   if (micStatus === "listening" || micStatus === "requesting") pitchListener.stop();
   releaseAlertAudio();
 });
