@@ -21,6 +21,10 @@ For GitHub Pages, select **Deploy from a branch** under **Settings → Pages** a
 - The tuner needs a microphone and a secure context. Audio samples are analyzed in memory on the device with no recordings or upload. The tuner stops when the page is backgrounded or you leave the Tuner view.
 - The timer recovers elapsed time after a reload or a suspended tab. A completion chime depends on the browser being able to run and play audio. The app shows completion when you return.
 
+## Jazz practice
+
+Open **Music → Jazz** for two beginner exercises. **Swing** teaches jazz rhythm and articulation with a straight and swung model, a count-in, and four bars of clicks on beats 2 and 4. **Hear it, play it** teaches jazz phrasing and ear training. Listen to a short riff, echo it over the next bar, and reveal its staff and fingering hints to check your answer. Both exercises have adjustable tempo and can be marked in the Practice review queue. All playback is generated in the browser.
+
 ## Checks
 
 The app has no build or runtime dependencies. Run the regression checks with [Deno](https://deno.com/):

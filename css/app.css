@@ -214,6 +214,26 @@
   font-size: .875rem;
 }
 
+#jazz-practice {
+  display: grid;
+  gap: .75rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-alt);
+  padding: .85rem;
+}
+
+.jazz-settings {
+  display: grid;
+  grid-template-columns: minmax(0, 16rem) minmax(7rem, 9rem);
+  gap: .65rem;
+}
+
+.jazz-status {
+  color: var(--ink-soft);
+  font-weight: 650;
+}
+
 .storage-warning { margin-block: 1.25rem; color: var(--copper-dark); }
 
 @media (min-width: 1180px) {
