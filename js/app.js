@@ -1,4 +1,4 @@
-import { NOTES, SCALES, DRILLS, SONGS, noteByMidi } from "./music.js";
+import { NOTES, SCALES, DRILLS, SONGS, HOLIDAY_SONGS, noteByMidi } from "./music.js";
 import { renderFingering, renderScore } from "./notation.js";
 import { createPitchListener, pitchReading } from "./pitch.js";
 import {
@@ -11,8 +11,8 @@ const announcements = document.querySelector("#announcements");
 const headerTimer = document.querySelector("#header-timer");
 const navigation = [...document.querySelectorAll("#main-nav [data-view]")];
 const views = navigation.map(({ dataset }) => dataset.view);
-const catalogs = { scales: SCALES, drills: DRILLS, songs: SONGS };
-const catalogLabels = { scales: "Scales", drills: "Note sets", songs: "Songs" };
+const catalogs = { scales: SCALES, drills: DRILLS, songs: SONGS, holiday: HOLIDAY_SONGS };
+const catalogLabels = { scales: "Scales", drills: "Note sets", songs: "Songs", holiday: "Holiday" };
 const wideScore = window.matchMedia("(min-width: 1180px)");
 const exercises = [...SCALES, ...DRILLS];
 const initial = loadPractice(exercises.map(({ id }) => id));
@@ -261,14 +261,14 @@ function currentItem() {
 }
 
 function rangeLabel(item) {
-  const pitches = item.notes.map(({ midi }) => midi);
+  const pitches = item.notes.flatMap(({ midi }) => midi === null ? [] : [midi]);
   return `${noteByMidi(Math.min(...pitches)).label}–${noteByMidi(Math.max(...pitches)).label}`;
 }
 
 function musicView() {
   const item = currentItem();
   const stats = practiceStats(item);
-  const isExercise = category !== "songs";
+  const isExercise = item.kind !== "song";
   return `
     ${viewHeader("Music", "Practice scales, short note sets, and solo flute pieces.")}
     <div class="music-tabs segmented" role="group" aria-label="Music type">

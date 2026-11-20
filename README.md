@@ -1,6 +1,6 @@
 # PortaFluter
 
-A browser-based practice workspace for standard Boehm-system concert C flute. Browse fingerings from C4 through C7, study flashcards, play all 12 major and 12 natural minor scales, work on short note sets, and read five solo flute arrangements. Practice history, a review queue, a one-hour timer, and an on-device tuner are built in.
+A browser-based practice workspace for standard Boehm-system concert C flute. Browse fingerings from C4 through C7, study flashcards, play all 12 major and 12 natural minor scales, work on short note sets, and read solo flute arrangements. Practice history, a review queue, a one-hour timer, and an on-device tuner are built in.
 
 ## Run locally
 
@@ -33,4 +33,5 @@ deno test tests
 
 - The standard fingering data is based on the [Woodwind Fingering Guide](https://www.wfg.woodwind.org/flute/) and [Yamaha's flute guide](https://www.yamaha.com/en/musical_instrument_guide/flute/play/play002.html).
 - The original flute settings draw on historical sources for [Ode to Joy](https://www.loc.gov/item/2021668114/), [Greensleeves](https://urresearch.rochester.edu/institutionalPublicationPublicView.action?institutionalItemVersionId=17175), [Clair de lune](https://urresearch.rochester.edu/institutionalPublicationPublicView.action?institutionalItemId=11883), [Amazing Grace](https://www.loc.gov/collections/amazing-grace/articles-and-essays/timeline/), and [Twinkle, Twinkle, Little Star](https://dme.mozarteum.at/DME/objs/pdf/nma_199_49_57.pdf).
+- The Holiday collection also draws on the [archival Shchedryk scores](https://www.nbuv.gov.ua/node/3286), [Hanby's 1866 Santa Claus](https://www.sheetmusicsinger.com/up-on-the-housetop/), [the 1887 Jingle Bells refrain](https://en.wikisource.org/wiki/Page:College_Songs_(Waite,_1887).djvu/76), [Gruber's Silent Night autograph](https://commons.wikimedia.org/wiki/File:Autograph_Gruber_VII_Stille_Nacht.jpg), and [Hopkins's 1863 We Three Kings score](https://www.hymnologyarchive.com/we-three-kings).
 - The tuner uses a normalized square difference function based on [McLeod and Wyvill's pitch detection work](https://quod.lib.umich.edu/cgi/p/pod/dod-idx/smarter-way-to-find-pitch.pdf?c=icmc%3Bidno%3Dbbp2372.2005.107%3Bformat%3Dpdf).

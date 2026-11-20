@@ -62,6 +62,7 @@ const SIGNS = { "-1": "♭", 0: "", 1: "♯" };
 
 function parseNote(token) {
   const [pitch, duration = "1"] = token.split(":");
+  if (token === "R:0.5") return { midi: null, beats: 0.5 };
   const [, letter, sign, register] = /^([A-G])([#b♯♭]?)([4-7])$/.exec(pitch);
   const octave = Number(register);
   const accidental = ACCIDENTALS[sign] ?? 0;
@@ -148,6 +149,7 @@ export const SONGS = [
   `),
   song({
     id: "greensleeves", title: "Greensleeves", composer: "Traditional English", level: "Intermediate",
+    collection: "holiday",
     description: "A solo setting of the traditional melody in A minor with a lilting compound meter.",
     source: "https://urresearch.rochester.edu/institutionalPublicationPublicView.action?institutionalItemVersionId=17175",
     meter: [6, 8], signature: {},
@@ -197,4 +199,79 @@ export const SONGS = [
     C5 C5 Bb4 Bb4 | A4 A4 G4:2 | C5 C5 Bb4 Bb4 | A4 A4 G4:2 |
     F4 F4 C5 C5 | D5 D5 C5:2 | Bb4 Bb4 A4 A4 | G4 G4 F4:2
   `),
+  song({
+    id: "carol-of-the-bells", title: "Carol of the Bells (Shchedryk)", composer: "Mykola Leontovych", level: "Intermediate",
+    collection: "holiday",
+    description: "A short G-minor solo study based on the Ukrainian original. Keep the bell motif even as it moves between registers.",
+    source: "https://www.nbuv.gov.ua/node/3286", meter: [3, 4], signature: { B: -1, E: -1 },
+  }, `
+    Bb4 A4:0.5 Bb4:0.5 G4 | Bb4 A4:0.5 Bb4:0.5 G4 |
+    Bb4 A4:0.5 Bb4:0.5 G4 | Bb4 A4:0.5 Bb4:0.5 G4 |
+    D5 C5:0.5 D5:0.5 Bb4 | D5 C5:0.5 D5:0.5 Bb4 |
+    Bb4 A4:0.5 Bb4:0.5 G4 | Bb4 A4:0.5 Bb4:0.5 G4 |
+    G5:0.5 G5:0.5 F5:0.5 Eb5:0.5 D5:0.5 C5:0.5 | D5 C5:0.5 D5:0.5 Bb4 |
+    G5:0.5 G5:0.5 F5:0.5 Eb5:0.5 D5:0.5 C5:0.5 | D5 C5:0.5 D5:0.5 Bb4 |
+    Bb4 A4:0.5 Bb4:0.5 G4 | Bb4 A4:0.5 Bb4:0.5 G4 |
+    Bb4 A4:0.5 Bb4:0.5 G4 | G4:3
+  `),
+  song({
+    id: "up-on-the-housetop", title: "Up on the Housetop", composer: "Benjamin Russell Hanby", level: "Easy",
+    collection: "holiday",
+    description: "A verse and refrain in F major based on Hanby’s 1866 Santa Claus. Practice the short repeated notes slowly before bringing up the tempo.",
+    source: "https://www.sheetmusicsinger.com/up-on-the-housetop/", meter: [2, 4], signature: { B: -1 },
+  }, `
+    C5:0.5 C5:0.25 C5:0.25 C5:0.5 A4:0.25 A4:0.25 | F4:0.5 A4:0.5 C5 |
+    D5:0.5 D5:0.25 D5:0.25 C5:0.5 A4:0.5 | G4:0.5 C5:0.5 C5 |
+    C5:0.5 C5:0.25 C5:0.25 C5:0.5 A4:0.25 A4:0.25 | F4:0.5 A4:0.5 C5 |
+    D5:0.5 D5:0.25 D5:0.25 C5:0.25 A4:0.25 A4:0.5 | G4:0.5 C5:0.5 F4 |
+    C5:0.5 C5:0.5 C5 | Bb4:0.5 Bb4:0.25 D5:0.25 G4 |
+    Bb4:0.5 Bb4:0.5 Bb4 | A4:0.5 A4:0.25 C5:0.25 F4 |
+    D5:0.5 D5:0.25 D5:0.25 D5:0.5 Bb4:0.5 | Bb4:0.5 D5:0.5 C5 |
+    D5:0.5 D5:0.25 D5:0.25 D5:0.5 Bb4:0.25 Bb4:0.25 | A4:0.5 C5:0.5 F4
+  `),
+  song({
+    id: "jingle-bells", title: "Jingle Bells", composer: "James Lord Pierpont", level: "Easy",
+    collection: "holiday",
+    description: "The refrain from the 1887 College Songs edition, transposed to G major. Use light tonguing on the repeated notes.",
+    source: "https://en.wikisource.org/wiki/Page:College_Songs_(Waite,_1887).djvu/76",
+    meter: [4, 4], signature: { F: 1 },
+  }, `
+    B4:0.5 B4:0.5 B4 B4:0.5 B4:0.5 B4 | B4:0.5 D5:0.5 G4:0.75 A4:0.25 B4:1.5 R:0.5 |
+    C5:0.5 C5:0.5 C5:0.75 C5:0.25 C5:0.5 B4:0.5 B4:0.5 B4:0.25 B4:0.25 |
+    B4:0.5 A4:0.5 A4:0.5 G4:0.5 A4:0.5 D5:1.5 |
+    B4:0.5 B4:0.5 B4 B4:0.5 B4:0.5 B4 | B4:0.5 D5:0.5 G4:0.75 A4:0.25 B4:1.5 R:0.5 |
+    C5:0.5 C5:0.5 C5:0.75 C5:0.25 C5:0.5 B4:0.5 B4:0.5 B4:0.25 B4:0.25 |
+    D5:0.5 D5:0.5 C5:0.5 A4:0.5 G4:1.5 R:0.5
+  `),
+  song({
+    id: "silent-night", title: "Silent Night", composer: "Franz Xaver Gruber", level: "Easy",
+    collection: "holiday",
+    description: "A gentle D-major setting in 6/8. Shape each phrase with a steady tone and take a breath between phrases.",
+    source: "https://commons.wikimedia.org/wiki/File:Autograph_Gruber_VII_Stille_Nacht.jpg",
+    meter: [6, 8], signature: { F: 1, C: 1 },
+  }, `
+    A4:0.75 B4:0.25 A4:0.5 F#4:1.5 | A4:0.75 B4:0.25 A4:0.5 F#4:1.5 |
+    E5 E5:0.5 C#5:1.5 | D5 D5:0.5 A4:1.5 |
+    B4 B4:0.5 D5:0.75 C#5:0.25 B4:0.5 | A4:0.75 B4:0.25 A4:0.5 F#4:1.5 |
+    B4 B4:0.5 D5:0.75 C#5:0.25 B4:0.5 | A4:0.75 B4:0.25 A4:0.5 F#4:1.5 |
+    E5 E5:0.5 G5:0.75 E5:0.25 C#5:0.5 | D5:1.5 F#5:1.5 |
+    D5:0.5 A4:0.5 F#4:0.5 A4:0.75 G4:0.25 E4:0.5 | D4:3
+  `),
+  song({
+    id: "we-three-kings", title: "We Three Kings", composer: "John Henry Hopkins Jr.", level: "Intermediate",
+    collection: "holiday",
+    description: "The verse and refrain from Hopkins’s 1863 score. Keep the 3/8 pulse as the verse in E minor gives way to the G-major refrain.",
+    source: "https://www.hymnologyarchive.com/we-three-kings", meter: [3, 8], signature: { F: 1 },
+  }, `
+    B4 A4:0.5 | G4 E4:0.5 | F#4:0.5 G4:0.5 F#4:0.5 | E4 R:0.5 |
+    B4 A4:0.5 | G4 E4:0.5 | F#4:0.5 G4:0.5 F#4:0.5 | E4 R:0.5 |
+    G4 G4:0.5 | A4 A4:0.5 | B4 B4:0.5 | D5:0.5 C5:0.5 B4:0.5 |
+    A4:0.5 B4:0.5 A4:0.5 | G4 F#4:0.5 | E4 R:0.5 |
+    D4:1.5 | G4 G4:0.5 | G4 D4:0.5 | G4 E4:0.5 | G4 R:0.5 |
+    G4 G4:0.5 | G4 E4:0.5 | G4 E4:0.5 | G4 R:0.5 |
+    G4 G4:0.5 | A4 B4:0.5 | C5 B4:0.5 | A4 B4:0.5 |
+    G4 G4:0.5 | G4 E4:0.5 | G4 E4:0.5 | G4:1.5
+  `),
 ];
+
+export const HOLIDAY_SONGS = SONGS.filter(({ collection }) => collection === "holiday");

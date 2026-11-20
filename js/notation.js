@@ -164,6 +164,19 @@ function drawNote(note, x, accidentalLabel, noteIndex, selectedIndex, onNote) {
   return group;
 }
 
+function drawEighthRest(x) {
+  const y = staffY(5);
+  const rest = svgElement("g", { class: "staff-eighth-rest", role: "img", "aria-label": "Eighth rest" });
+  rest.append(
+    svgElement("circle", { cx: x - 3, cy: y, r: 2.8, fill: "currentColor" }),
+    svgElement("path", {
+      d: `M${x - 3} ${y + 1} q4 5 10 -2 l-6 17`,
+      fill: "none", stroke: "currentColor", "stroke-width": 1.8, "stroke-linecap": "round",
+    }),
+  );
+  return rest;
+}
+
 function scoreSystems(item) {
   const { notes, kind } = item;
   const capacity = kind === "major" || kind === "minor" ? 8 : NOTE_CAPACITY;
@@ -239,6 +252,10 @@ function drawSystem(system, item, selectedIndex, onNote, showFingerings) {
       activeAccidentals = {};
       bar = note.bar;
     }
+    if (note.midi === null) {
+      svg.append(drawEighthRest(x));
+      return;
+    }
     const key = note.letter + note.octave;
     const current = activeAccidentals[key] ?? signature[note.letter] ?? 0;
     const accidental = note.accidental === current ? "" : ACCIDENTALS[note.accidental];
@@ -273,7 +290,7 @@ export function renderScore(item, { onNote, showFingerings = false, selectedInde
 
     const seen = new Set();
     for (const note of item.notes) {
-      if (seen.has(note.midi)) continue;
+      if (note.midi === null || seen.has(note.midi)) continue;
       seen.add(note.midi);
       const item = document.createElement("li");
       const label = document.createElement("span");
