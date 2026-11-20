@@ -22,6 +22,8 @@ let queueFilter = "all";
 let fullQueue = false;
 let chartMode = "list";
 let noteSearch = "";
+let cardOrder = "ordered";
+let shuffledDeck = null;
 let cardIndex = 0;
 let cardRevealed = false;
 let category = "scales";
@@ -183,6 +185,24 @@ function matchingNotes() {
   });
 }
 
+function flashcardNotes() {
+  if (cardOrder === "ordered") return matchingNotes();
+  if (shuffledDeck) return shuffledDeck;
+
+  shuffledDeck = matchingNotes();
+  for (let index = shuffledDeck.length - 1; index > 0; index--) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffledDeck[index], shuffledDeck[swapIndex]] = [shuffledDeck[swapIndex], shuffledDeck[index]];
+  }
+  return shuffledDeck;
+}
+
+function resetCardDeck() {
+  shuffledDeck = null;
+  cardIndex = 0;
+  cardRevealed = false;
+}
+
 function fingeringsView() {
   return `
     ${viewHeader("Fingerings", "Concert C flute fingerings from C4 to C7.")}
@@ -198,7 +218,7 @@ function fingeringsView() {
 
 function renderChart() {
   const mount = document.querySelector("#chart-results");
-  const notes = matchingNotes();
+  const notes = chartMode === "cards" ? flashcardNotes() : matchingNotes();
   if (!notes.length) {
     mount.innerHTML = '<p class="panel empty-state">No matching notes. Try a letter name or octave.</p>';
     return;
@@ -214,6 +234,13 @@ function renderChart() {
     cardIndex = Math.min(cardIndex, notes.length - 1);
     const note = notes[cardIndex];
     mount.innerHTML = `<section class="panel flashcard" aria-label="Fingering flashcard">
+      <div class="flashcard-controls">
+        <div class="segmented" role="group" aria-label="Flashcard order">
+          ${pressedButton("In order", "card-order", "ordered", cardOrder === "ordered")}
+          ${pressedButton("Random", "card-order", "random", cardOrder === "random")}
+        </div>
+        ${cardOrder === "random" && notes.length > 1 ? '<button type="button" class="button quiet" data-action="shuffle-cards">Shuffle again</button>' : ""}
+      </div>
       <p class="eyebrow">Card ${cardIndex + 1} of ${notes.length}</p>
       <h2 class="flashcard-note">${html(note.label)}</h2>
       <div class="flashcard-answer" id="flashcard-answer" ${cardRevealed ? "" : "hidden"}>${cardRevealed ? `<div data-fingering-midi="${note.midi}"></div>` : ""}</div>
@@ -542,8 +569,16 @@ function focusAction(action, value) {
   match?.focus({ preventScroll: true });
 }
 
+function restartFlashcards(action, value) {
+  resetCardDeck();
+  renderChart();
+  focusAction(action, value);
+  announce(`Card 1. ${flashcardNotes()[0].label}.`);
+}
+
 function changeCard(action) {
-  const count = matchingNotes().length;
+  const notes = flashcardNotes();
+  const count = notes.length;
   if (!count) return;
   if (action === "reveal-card") {
     cardRevealed = !cardRevealed;
@@ -553,7 +588,7 @@ function changeCard(action) {
   }
   renderChart();
   focusAction(action);
-  if (action !== "reveal-card") announce(`Card ${cardIndex + 1}. ${matchingNotes()[cardIndex].label}.`);
+  if (action !== "reveal-card") announce(`Card ${cardIndex + 1}. ${notes[cardIndex].label}.`);
 }
 
 const actions = {
@@ -603,6 +638,12 @@ const actions = {
     render();
     focusAction("chart-mode", value);
   },
+  "card-order"(value) {
+    if (cardOrder === value) return;
+    cardOrder = value;
+    restartFlashcards("card-order", value);
+  },
+  "shuffle-cards": () => restartFlashcards("shuffle-cards"),
   "reveal-card": () => changeCard("reveal-card"),
   "next-card": () => changeCard("next-card"),
   "previous-card": () => changeCard("previous-card"),
@@ -648,8 +689,7 @@ app.addEventListener("click", (event) => {
 app.addEventListener("input", ({ target }) => {
   if (target.dataset.setting === "note-search") {
     noteSearch = target.value;
-    cardIndex = 0;
-    cardRevealed = false;
+    resetCardDeck();
     renderChart();
   }
 });
