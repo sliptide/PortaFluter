@@ -12,7 +12,7 @@ python3 -m http.server 8000 --bind 127.0.0.1
 
 Open [PortaFluter on localhost](http://localhost:8000). The app uses browser modules, so serve the files over HTTP on localhost or HTTPS.
 
-For GitHub Pages, select **Deploy from a branch** under **Settings → Pages** and choose the branch and **/ (root)**. For a self-hosted site, serve `index.html`, `notation.css`, and the `css/` and `js/` directories over HTTPS. The files use relative paths and can live in a site subdirectory. If your host supports security response headers, set `Permissions-Policy: microphone=(self), camera=()` and a Content Security Policy with `frame-ancestors 'none'`. The app already includes a resource policy in its HTML.
+For GitHub Pages, select **Deploy from a branch** under **Settings → Pages** and choose the branch and **/ (root)**. For a self-hosted site, serve `index.html`, `notation.css`, and the `assets/`, `css/`, and `js/` directories over HTTPS. The files use relative paths and can live in a site subdirectory. If your host supports security response headers, set `Permissions-Policy: microphone=(self), camera=()` and a Content Security Policy with `frame-ancestors 'none'`. The app already includes a resource policy in its HTML.
 
 ## Practice and privacy
 
