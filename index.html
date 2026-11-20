@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+    <meta name="theme-color" content="#EDE3CF">
+    <meta name="description" content="A flute practice workspace for fingerings, scales, sheet music, and live pitch feedback.">
+    <title>PortaFluter · Flute Practice</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./notation.css">
+    <link rel="stylesheet" href="./css/app.css">
+    <script type="module" src="./js/app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#app">Skip to main content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="#practice" aria-label="PortaFluter home">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="brand-text">
+            <span class="brand-name">PortaFluter</span>
+            <span class="brand-company">Portafilter Music</span>
+          </span>
+        </a>
+        <nav id="main-nav" class="main-nav" aria-label="Main navigation">
+          <a href="#practice" data-view="practice" aria-current="page">Practice</a>
+          <a href="#fingerings" data-view="fingerings">Fingerings</a>
+          <a href="#music" data-view="music">Music</a>
+          <a href="#tuner" data-view="tuner">Tuner</a>
+        </nav>
+        <button type="button" id="header-timer" class="header-timer" data-action="show-practice-timer" hidden></button>
+      </div>
+    </header>
+    <main id="app" class="app-shell" tabindex="-1">
+      <noscript>
+        <h1>PortaFluter</h1>
+        <p>Enable JavaScript to use the flute practice tools.</p>
+      </noscript>
+    </main>
+    <div id="announcements" class="screen-reader-only" role="status" aria-live="polite" aria-atomic="true"></div>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span>Portafilter Music</span>
+        <span>Practice data stays in this browser.</span>
+      </div>
+    </footer>
+  </body>
+</html>

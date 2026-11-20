@@ -1,0 +1,186 @@
+.notation-score {
+  min-width: 0;
+}
+
+.score-staff-window {
+  overflow-x: auto;
+}
+
+.score-staff {
+  display: block;
+  width: 100%;
+  min-width: 21rem;
+  height: auto;
+  max-height: 12rem;
+  color: var(--ink, #3b2415);
+}
+
+.staff-line,
+.staff-barline,
+.staff-ledger-line,
+.staff-stem,
+.staff-flag,
+.staff-clef {
+  fill: none;
+  stroke: currentColor;
+}
+
+.staff-line { stroke-width: .9; }
+.staff-barline { stroke-width: 1.2; }
+.staff-ledger-line { stroke-width: 1.4; }
+.staff-stem { stroke-width: 1.6; }
+.staff-flag { stroke-width: 2.45; stroke-linecap: round; }
+.staff-clef { stroke-width: 2.9; stroke-linecap: round; stroke-linejoin: round; }
+
+.staff-key-sign,
+.staff-meter,
+.staff-accidental,
+.staff-notehead,
+.staff-duration-dot {
+  fill: currentColor;
+}
+
+.staff-notehead.is-open {
+  fill: var(--surface, #fffaf0);
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+
+.staff-key-sign,
+.staff-accidental {
+  font: 22px Georgia, "Times New Roman", serif;
+  dominant-baseline: central;
+}
+
+.staff-accidental { text-anchor: end; }
+
+.staff-meter {
+  font: bold 23px Georgia, "Times New Roman", serif;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+
+.staff-note-label {
+  fill: currentColor;
+  font: 600 14px var(--body, sans-serif);
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.engraved-note[role="button"] {
+  cursor: pointer;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.staff-note-target {
+  fill: transparent;
+  stroke: transparent;
+}
+
+.engraved-note[aria-pressed="true"] {
+  color: var(--copper-dark, #754820);
+}
+
+.engraved-note[aria-pressed="true"] .staff-note-target {
+  fill: #b07a4320;
+  stroke: var(--copper, #b07a43);
+}
+
+.engraved-note:focus-visible .staff-note-target {
+  stroke: var(--copper-dark, #754820);
+  stroke-width: 2.5;
+}
+
+@media (hover: hover) {
+  .engraved-note:hover .staff-note-target {
+    fill: #b07a4320;
+  }
+}
+
+.notation-fingering {
+  min-width: 0;
+  margin: 0;
+}
+
+.fingering-diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 30rem;
+  overflow: visible;
+  color: var(--ink, #3b2415);
+}
+
+.fingering-key-line {
+  stroke: var(--line, #d8c9af);
+  stroke-width: 2;
+}
+
+.fingering-group-label,
+.fingering-key text {
+  text-anchor: middle;
+  font-family: var(--body, sans-serif);
+}
+
+.fingering-group-label {
+  fill: var(--ink-soft, #624b39);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.fingering-key circle {
+  fill: var(--surface, #fffaf0);
+  stroke: var(--ink-soft, #624b39);
+  stroke-width: 1;
+}
+
+.fingering-key text {
+  fill: currentColor;
+  font-size: 10.5px;
+  font-weight: 600;
+  dominant-baseline: central;
+}
+
+.fingering-key.is-pressed circle {
+  fill: var(--copper-dark, #754820);
+  stroke: var(--copper-dark, #754820);
+}
+
+.fingering-key.is-pressed text {
+  fill: var(--surface, #fffaf0);
+}
+
+.fingering-keys {
+  color: var(--ink-soft, #624b39);
+  font-size: .875rem;
+  line-height: 1.45;
+}
+
+.score-fingerings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  gap: .55rem;
+  padding: 0;
+  margin: .6rem 0 0;
+  list-style: none;
+}
+
+.score-fingerings li {
+  min-width: 0;
+  padding: .55rem .65rem .3rem;
+  background: var(--surface-alt, #f5ecdb);
+  border: 1px solid var(--line, #d8c9af);
+  border-radius: 8px;
+}
+
+.score-fingering-label {
+  color: var(--ink, #3b2415);
+  font-size: .9rem;
+  font-weight: 700;
+}
+
+@media (max-width: 480px) {
+  .fingering-key text { font-size: 12px; }
+  .fingering-group-label { font-size: 13px; }
+}

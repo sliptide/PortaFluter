@@ -1,0 +1,247 @@
+:root {
+  --number: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+}
+
+.practice-layout {
+  grid-template-areas: 'next timer' 'queue log';
+}
+
+.hero-card { grid-area: next; min-height: 100%; }
+.timer-card { grid-area: timer; }
+.review-panel { grid-area: queue; }
+.practice-log { grid-area: log; }
+
+.review-header, .timer-card .panel-header,
+.music-detail-heading, .tuner-display .panel-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .65rem 1rem;
+}
+
+.review-header p, .music-detail-heading p {
+  margin-top: .3rem;
+  color: var(--ink-soft);
+}
+
+.timer-value, .header-timer, .tuner-cents, .dial-labels {
+  font-family: var(--number);
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-caption { color: var(--ink-soft); }
+.timer-controls { display: grid; gap: .85rem; margin-top: .35rem; }
+.timer-duration { max-width: 10rem; }
+
+.log-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .6rem;
+  margin: 0;
+}
+
+.log-stats div {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: start;
+  justify-content: space-between;
+}
+
+.log-stats dt {
+  color: var(--ink-soft);
+  font-size: .875rem;
+}
+
+.log-stats dd {
+  margin: 0;
+  font: 700 1.45rem/1.4 var(--number);
+}
+
+.practice-queue + .panel-footer {
+  margin-top: -.65rem;
+  padding-top: .25rem;
+}
+
+.note-search { width: min(100%, 18rem); }
+.fingering-list { border: 0; background: transparent; box-shadow: none; }
+.note-label { font: 700 1.55rem/1.2 var(--body); }
+.flashcard-answer { width: min(100%, 28rem); }
+
+.music-catalog {
+  position: sticky;
+  top: .75rem;
+  max-height: min(42rem, calc(100vh - 2rem));
+  gap: .75rem;
+}
+
+.catalog-mobile { display: none; }
+.catalog-list { overflow: auto; padding: .25rem; }
+.catalog-item > span { color: var(--ink-soft); font-size: .875rem; font-weight: 400; }
+
+.music-detail-heading {
+  align-items: start;
+  flex-direction: column;
+}
+
+.score-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .4rem;
+}
+
+.focus-chip {
+  background: #f1dfc6;
+  border-color: #bc9364;
+  color: var(--copper-dark);
+}
+
+.score-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  min-width: 0;
+  gap: .75rem;
+}
+
+#score { min-width: 0; }
+
+.score-hint {
+  display: grid;
+  gap: .35rem;
+  margin-block: .4rem;
+  scroll-margin: 1rem;
+}
+
+.practice-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+}
+
+.practice-actions [aria-pressed='true'] {
+  border-color: var(--copper-dark);
+  background: #f1dfc6;
+}
+
+.tuner-controls .panel-body { gap: 1rem; }
+.tuner-meter { gap: .75rem; min-height: 320px; }
+.tuner-reading { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: .85rem; }
+.tuner-reading > div + div { min-width: 7rem; text-align: left; }
+.tuner-cents { font-size: clamp(1.15rem, 3vw, 1.55rem); }
+.tuner-message { min-height: 2.75em; }
+
+.tuner-scale {
+  width: min(100%, 18rem);
+  padding-inline: .45rem;
+}
+
+.tuner-dial {
+  position: relative;
+  aspect-ratio: 2 / 1;
+  margin-inline: .6rem;
+  color: var(--copper-dark);
+}
+
+.tuner-dial::after {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: .7rem;
+  height: .7rem;
+  border-radius: 50%;
+  transform: translate(-50%, 50%);
+  background: var(--ink);
+  content: '';
+}
+
+.tuner-dial > span {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  height: 100%;
+  transform: translateX(-50%) rotate(var(--dial-angle, 0deg));
+  transform-origin: center bottom;
+}
+
+.dial-tick::before, .tuner-needle::before {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  border-radius: 2px;
+  background: currentColor;
+  content: '';
+}
+
+.dial-tick::before { top: 0; height: 8%; }
+.dial-tick[data-position='-10']::before,
+.dial-tick[data-position='-5']::before,
+.dial-tick[data-position='0']::before,
+.dial-tick[data-position='5']::before,
+.dial-tick[data-position='10']::before { height: 14%; width: 3px; }
+.dial-tick[data-position='0'] { color: var(--ink); }
+
+.tuner-dial .tuner-needle {
+  width: 3px;
+  color: var(--ink);
+  transition: transform 90ms linear;
+}
+
+.tuner-needle::before { bottom: 0; height: 81%; }
+.tuner-dial [data-position='-10'] { --dial-angle: -80deg; }
+.tuner-dial [data-position='-9'] { --dial-angle: -72deg; }
+.tuner-dial [data-position='-8'] { --dial-angle: -64deg; }
+.tuner-dial [data-position='-7'] { --dial-angle: -56deg; }
+.tuner-dial [data-position='-6'] { --dial-angle: -48deg; }
+.tuner-dial [data-position='-5'] { --dial-angle: -40deg; }
+.tuner-dial [data-position='-4'] { --dial-angle: -32deg; }
+.tuner-dial [data-position='-3'] { --dial-angle: -24deg; }
+.tuner-dial [data-position='-2'] { --dial-angle: -16deg; }
+.tuner-dial [data-position='-1'] { --dial-angle: -8deg; }
+.tuner-dial [data-position='1'] { --dial-angle: 8deg; }
+.tuner-dial [data-position='2'] { --dial-angle: 16deg; }
+.tuner-dial [data-position='3'] { --dial-angle: 24deg; }
+.tuner-dial [data-position='4'] { --dial-angle: 32deg; }
+.tuner-dial [data-position='5'] { --dial-angle: 40deg; }
+.tuner-dial [data-position='6'] { --dial-angle: 48deg; }
+.tuner-dial [data-position='7'] { --dial-angle: 56deg; }
+.tuner-dial [data-position='8'] { --dial-angle: 64deg; }
+.tuner-dial [data-position='9'] { --dial-angle: 72deg; }
+.tuner-dial [data-position='10'] { --dial-angle: 80deg; }
+
+.dial-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: .55rem;
+  color: var(--ink-soft);
+  font-size: .875rem;
+}
+
+.storage-warning { margin-block: 1.25rem; color: var(--copper-dark); }
+
+@media (min-width: 1180px) {
+  .score-stage.has-side-hint { grid-template-columns: minmax(0, 1fr) minmax(13rem, 33%); }
+  .has-side-hint .score-hint { position: sticky; top: 1rem; }
+}
+
+@media (max-width: 755px) {
+  .practice-layout { grid-template-areas: 'next' 'timer' 'queue' 'log'; }
+  .hero-card { min-height: 220px; }
+  .music-catalog { position: static; max-height: none; }
+  .music-catalog .panel-header, .catalog-list { display: none; }
+  .catalog-mobile { display: grid; }
+  .timer-controls { grid-template-columns: minmax(6.6rem, 1fr) 1.6fr; align-items: end; }
+  .tuner-meter { min-height: 260px; }
+}
+
+@media (max-width: 360px) {
+  .timer-controls { grid-template-columns: 1fr; }
+  .tuner-reading { gap: .6rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tuner-dial .tuner-needle { transition: none; }
+}
