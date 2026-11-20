@@ -71,13 +71,7 @@
 .music-catalog {
   position: sticky;
   top: .75rem;
-  max-height: min(42rem, calc(100vh - 2rem));
-  gap: .75rem;
 }
-
-.catalog-mobile { display: none; }
-.catalog-list { overflow: auto; padding: .25rem; }
-.catalog-item > span { color: var(--ink-soft); font-size: .875rem; font-weight: 400; }
 
 .music-detail-heading {
   align-items: start;
@@ -230,9 +224,7 @@
 @media (max-width: 755px) {
   .practice-layout { grid-template-areas: 'next' 'timer' 'queue' 'log'; }
   .hero-card { min-height: 220px; }
-  .music-catalog { position: static; max-height: none; }
-  .music-catalog .panel-header, .catalog-list { display: none; }
-  .catalog-mobile { display: grid; }
+  .music-catalog { position: static; }
   .timer-controls { grid-template-columns: minmax(6.6rem, 1fr) 1.6fr; align-items: end; }
   .tuner-meter { min-height: 260px; }
 }

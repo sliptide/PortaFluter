@@ -75,18 +75,6 @@ function persist() {
   if (warning) warning.hidden = storageAvailable;
 }
 
-function restoreCatalogPosition(previous) {
-  const list = app.querySelector(".catalog-list");
-  const selected = list.querySelector('[aria-pressed="true"]');
-  if (!selected || !list.clientHeight) return;
-  if (previous?.category === category) list.scrollTop = previous.top;
-  const viewport = list.getBoundingClientRect();
-  const item = selected.getBoundingClientRect();
-  if (item.top < viewport.top || item.bottom > viewport.bottom) {
-    list.scrollTop += item.top - viewport.top - 4;
-  }
-}
-
 function viewHeader(title, detail) {
   return `<header class="view-header"><h1>${html(title)}</h1><p class="view-intro">${html(detail)}</p></header>`;
 }
@@ -260,20 +248,12 @@ function musicView() {
       ${Object.entries(catalogLabels).map(([key, label]) => pressedButton(label, "music-category", key, category === key)).join("")}
     </div>
     <div class="music-layout">
-      <aside class="panel music-catalog" aria-label="${catalogLabels[category]}" data-category="${category}">
-        <div class="panel-header"><h2>${catalogLabels[category]}</h2></div>
-        <div class="field catalog-mobile">
-          <label for="music-choice">Choose a piece or exercise</label>
-          <select id="music-choice" data-setting="music-choice">${catalogs[category].map((entry) => `<option value="${html(entry.id)}" ${entry.id === item.id ? "selected" : ""}>${html(entry.title)}</option>`).join("")}</select>
-        </div>
-        <ul class="catalog-list">${catalogs[category].map((entry) => {
-          const entryStats = practiceStats(entry);
-          return `<li><button type="button" class="catalog-item" aria-pressed="${entry.id === item.id}" data-action="select-music" data-value="${html(entry.id)}">
-            <strong>${html(entry.title)}</strong>
-            <span>${html(isExercise ? entryStats.label + (entryStats.needsWork ? " · Needs work" : "") : `${entry.level} · ${rangeLabel(entry)}`)}</span>
-          </button></li>`;
-        }).join("")}</ul>
-      </aside>
+      <div class="panel field music-catalog">
+        <label for="music-choice">${catalogLabels[category]}</label>
+        <select id="music-choice" data-setting="music-choice">
+          ${catalogs[category].map(({ id, title }) => `<option value="${html(id)}"${id === item.id ? " selected" : ""}>${html(title)}</option>`).join("")}
+        </select>
+      </div>
       <section class="panel music-detail" aria-labelledby="music-title">
         <div class="panel-header music-detail-heading">
           <div><h2 id="music-title">${html(item.title)}</h2>
@@ -528,11 +508,6 @@ function readTimerGoal(input) {
 const renderViews = { practice: practiceView, fingerings: fingeringsView, music: musicView, tuner: tunerView };
 
 function render() {
-  const previousList = app.querySelector(".catalog-list");
-  const previousCatalog = previousList && {
-    category: previousList.parentElement.dataset.category,
-    top: previousList.scrollTop,
-  };
   for (const link of navigation) {
     if (link.dataset.view === view) link.setAttribute("aria-current", "page");
     else link.removeAttribute("aria-current");
@@ -540,10 +515,7 @@ function render() {
   app.innerHTML = `<section class="view">${renderViews[view]()}</section>
     <p class="storage-warning" data-storage-warning ${storageAvailable ? "hidden" : ""}>Browser storage is unavailable. Changes last for this visit.</p>`;
   if (view === "fingerings") renderChart();
-  if (view === "music") {
-    mountScore();
-    restoreCatalogPosition(previousCatalog);
-  }
+  if (view === "music") mountScore();
   if (view === "tuner") updateTuner();
   updateTimer();
 }
@@ -568,13 +540,6 @@ function focusAction(action, value) {
   const match = [...app.querySelectorAll(`[data-action="${action}"]`)]
     .find((button) => value === undefined || button.dataset.value === value);
   match?.focus({ preventScroll: true });
-}
-
-function selectMusic(value) {
-  if (!catalogs[category].some(({ id }) => id === value)) return;
-  selections[category] = value;
-  selectedScoreNote = -1;
-  render();
 }
 
 function changeCard(action) {
@@ -647,10 +612,6 @@ const actions = {
     render();
     focusAction("music-category", value);
   },
-  "select-music"(value) {
-    selectMusic(value);
-    focusAction("select-music", value);
-  },
   "score-mode"(value) {
     showFingerings = value === "fingerings";
     render();
@@ -701,8 +662,11 @@ app.addEventListener("change", ({ target }) => {
       updateTuner();
       break;
     case "music-choice":
-      selectMusic(target.value);
-      document.querySelector("#music-choice")?.focus();
+      if (!catalogs[category].some(({ id }) => id === target.value)) break;
+      selections[category] = target.value;
+      selectedScoreNote = -1;
+      render();
+      document.querySelector("#music-choice").focus({ preventScroll: true });
       break;
     case "duration":
       readTimerGoal(target);
